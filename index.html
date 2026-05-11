@@ -2,29 +2,42 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>로버트 켈리 팔로워십 진단 도구 (Ver. 2.0)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>팔로워십 진단 PRO</title>
+    
+    <!-- 모바일 앱 환경 설정 (PWA) -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="팔로워십">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#0f172a">
+
+    <!-- 팔로워십 아이콘 (SVG 내장) -->
+    <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='100' fill='%230f172a'/%3E%3Cpath d='M256 150c-33 0-60 27-60 60s27 60 60 60 60-27 60-60-27-60-60-60zm-80 180c-44 0-80 36-80 80v20h320v-20c0-44-36-80-80-80h-160z' fill='%233b82f6'/%3E%3Cpath d='M380 200c-22 0-40 18-40 40s18 40 40 40 40-18 40-40-18-40-40-40zm-40 120c-33 0-60 27-60 60v15h200v-15c0-33-27-60-60-60h-80z' fill='%2394a3b8'/%3E%3C/svg%3E">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='100' fill='%230f172a'/%3E%3Cpath d='M256 150c-33 0-60 27-60 60s27 60 60 60 60-27 60-60-27-60-60-60zm-80 180c-44 0-80 36-80 80v20h320v-20c0-44-36-80-80-80h-160z' fill='%233b82f6'/%3E%3C/svg%3E">
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
-        body { font-family: 'Inter', sans-serif; }
+        body { font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
         .animate-fade-in { animation: fadeIn 0.5s ease-out; }
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
         .option-btn { @apply flex flex-col items-center justify-center p-3 rounded-xl border-2 border-slate-100 hover:border-blue-500 hover:bg-blue-50 transition-all text-center; }
+        @media print { .no-print { display: none; } }
     </style>
 </head>
 <body class="bg-slate-50 min-h-screen flex items-center justify-center p-4">
 
     <div id="app-container" class="max-w-2xl w-full bg-white rounded-3xl shadow-2xl overflow-hidden animate-fade-in">
         <!-- Header -->
-        <div class="bg-slate-900 text-white p-6 flex items-center justify-between">
+        <div class="bg-slate-900 text-white p-6 flex items-center justify-between no-print">
             <div class="flex items-center gap-2">
-                <i data-lucide="bar-chart-3" class="w-6 h-6 text-blue-400"></i>
-                <h1 class="text-xl font-bold tracking-tight">Followership Style Assessment</h1>
+                <i data-lucide="users" class="w-6 h-6 text-blue-400"></i>
+                <h1 class="text-xl font-bold tracking-tight">Followership Assessment</h1>
             </div>
             <div id="quiz-progress-text" class="hidden text-sm font-medium text-slate-400"></div>
         </div>
@@ -38,9 +51,9 @@
                 </div>
                 <h2 class="text-3xl font-extrabold text-slate-900">Followership Style 진단</h2>
                 <div class="text-slate-600 space-y-4 max-w-md mx-auto text-sm leading-relaxed">
-                    <p>각 질문에 대해 자신에게 해당된다고 생각하는 빈도를 선택해 주세요.</p>
-                    <div class="bg-slate-50 p-3 rounded-lg border border-slate-200">
-                        <span class="font-bold text-slate-800">0(거의 드물다) ~ 6(거의 언제나)</span>
+                    <p>로버트 켈리(Robert Kelley)의 모델을 바탕으로 당신의 팔로워십 유형을 진단합니다.</p>
+                    <div class="bg-slate-50 p-3 rounded-lg border border-slate-200 font-bold text-slate-800">
+                        0(거의 드물다) ~ 6(거의 언제나)
                     </div>
                 </div>
                 <button onclick="startQuiz()" class="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-12 rounded-2xl transition-all hover:scale-105 active:scale-95 shadow-lg shadow-blue-200">
@@ -58,42 +71,20 @@
                 </div>
 
                 <div class="min-h-[140px] flex flex-col items-center justify-center">
-                    <span id="question-number" class="text-blue-500 font-bold mb-2">Q1.</span>
+                    <span id="question-number" class="text-blue-500 font-bold mb-2 text-lg">Q1.</span>
                     <h3 id="question-text" class="text-xl font-bold text-center text-slate-900 leading-snug"></h3>
                 </div>
 
-                <div class="grid grid-cols-7 gap-2">
-                    <button onclick="handleAnswer(0)" class="option-btn">
-                        <span class="text-xs text-slate-400 mb-1">드묾</span>
-                        <span class="font-bold text-lg">0</span>
-                    </button>
-                    <button onclick="handleAnswer(1)" class="option-btn">
-                        <span class="text-xs text-transparent mb-1">.</span>
-                        <span class="font-bold text-lg">1</span>
-                    </button>
-                    <button onclick="handleAnswer(2)" class="option-btn">
-                        <span class="text-xs text-transparent mb-1">.</span>
-                        <span class="font-bold text-lg">2</span>
-                    </button>
-                    <button onclick="handleAnswer(3)" class="option-btn">
-                        <span class="text-xs text-slate-400 mb-1">보통</span>
-                        <span class="font-bold text-lg">3</span>
-                    </button>
-                    <button onclick="handleAnswer(4)" class="option-btn">
-                        <span class="text-xs text-transparent mb-1">.</span>
-                        <span class="font-bold text-lg">4</span>
-                    </button>
-                    <button onclick="handleAnswer(5)" class="option-btn">
-                        <span class="text-xs text-transparent mb-1">.</span>
-                        <span class="font-bold text-lg">5</span>
-                    </button>
-                    <button onclick="handleAnswer(6)" class="option-btn">
-                        <span class="text-xs text-slate-400 mb-1">언제나</span>
-                        <span class="font-bold text-lg">6</span>
-                    </button>
+                <div class="grid grid-cols-7 gap-1 md:gap-2">
+                    {[0, 1, 2, 3, 4, 5, 6].map(num => (
+                        `<button onclick="handleAnswer(${num})" class="option-btn">
+                            <span class="text-[10px] text-slate-400 mb-1">${num===0?'드묾':num===3?'보통':num===6?'항상':'.'}</span>
+                            <span class="font-bold text-lg">${num}</span>
+                        </button>`
+                    )).join('')}
                 </div>
 
-                <button id="prev-btn" onclick="prevQuestion()" class="flex items-center gap-1 text-slate-400 hover:text-slate-600 transition-colors">
+                <button id="prev-btn" onclick="prevQuestion()" class="flex items-center gap-1 text-slate-400 hover:text-slate-600 transition-colors pt-4">
                     <i data-lucide="chevron-left" class="w-4 h-4"></i> 이전 문항
                 </button>
             </div>
@@ -106,30 +97,30 @@
                     <p id="result-desc" class="text-xl font-medium text-blue-600"></p>
                 </div>
 
-                <!-- Quadrant Chart (0-60 Scale) -->
-                <div class="relative aspect-square w-full max-w-[300px] mx-auto border-2 border-slate-200 rounded-lg p-2 bg-slate-50 overflow-hidden">
+                <!-- Quadrant Chart -->
+                <div class="relative aspect-square w-full max-w-[300px] mx-auto border-2 border-slate-200 rounded-lg p-2 bg-slate-50 overflow-hidden shadow-inner">
                     <div class="absolute inset-0 flex items-center justify-center opacity-20">
                         <div class="w-full h-[1px] bg-slate-400"></div>
                         <div class="h-full w-[1px] bg-slate-400 absolute"></div>
                     </div>
-                    <span class="absolute top-2 left-2 text-[10px] font-bold text-slate-400">소외형</span>
-                    <span class="absolute top-2 right-2 text-[10px] font-bold text-slate-400">모범형</span>
-                    <span class="absolute bottom-2 left-2 text-[10px] font-bold text-slate-400">수동형</span>
-                    <span class="absolute bottom-2 right-2 text-[10px] font-bold text-slate-400">순응형</span>
-                    
-                    <div id="result-dot" class="absolute w-4 h-4 rounded-full border-2 border-white shadow-lg transition-all duration-1000 bg-blue-500" style="left: 50%; bottom: 50%; transform: translate(-50%, 50%);"></div>
-                    
-                    <div class="absolute -bottom-1 left-1/2 -translate-x-1/2 text-[9px] font-bold text-slate-500 uppercase">적극적 참여(X축)</div>
-                    <div class="absolute -left-10 top-1/2 -translate-y-1/2 -rotate-90 text-[9px] font-bold text-slate-500 whitespace-nowrap uppercase">독립적 사고(Y축)</div>
+                    <span class="absolute top-2 left-2 text-[10px] font-bold text-slate-400 uppercase">소외형</span>
+                    <span class="absolute top-2 right-2 text-[10px] font-bold text-slate-400 uppercase">모범형</span>
+                    <span class="absolute bottom-2 left-2 text-[10px] font-bold text-slate-400 uppercase">수동형</span>
+                    <span class="absolute bottom-2 right-2 text-[10px] font-bold text-slate-400 uppercase">순응형</span>
+                    <div id="result-dot" class="absolute w-4 h-4 rounded-full border-2 border-white shadow-lg transition-all duration-1000 bg-blue-500 z-10" style="left: 50%; bottom: 50%; transform: translate(-50%, 50%);"></div>
+                    <div class="absolute -bottom-1 left-1/2 -translate-x-1/2 text-[8px] font-black text-slate-400 uppercase tracking-tighter">적극적 참여(X)</div>
+                    <div class="absolute -left-12 top-1/2 -translate-y-1/2 -rotate-90 text-[8px] font-black text-slate-400 uppercase tracking-tighter">독립적 사고(Y)</div>
                 </div>
 
-                <div class="grid grid-cols-2 gap-4 mt-8 text-center">
-                    <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                <div class="grid grid-cols-2 gap-4 text-center">
+                    <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100 shadow-sm">
                         <div id="score-y" class="text-2xl font-black text-slate-900">0 <span class="text-sm font-normal text-slate-400">/ 60</span></div>
                         <div class="text-[10px] font-bold text-slate-500 uppercase mt-1">독립적 사고(Y)</div>
                     </div>
-                    <div id="score-x" class="text-2xl font-black text-slate-900">0 <span class="text-sm font-normal text-slate-400">/ 60</span></div>
-                    <div class="text-[10px] font-bold text-slate-500 uppercase mt-1">적극적 참여(X)</div>
+                    <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100 shadow-sm">
+                        <div id="score-x" class="text-2xl font-black text-slate-900">0 <span class="text-sm font-normal text-slate-400">/ 60</span></div>
+                        <div class="text-[10px] font-bold text-slate-500 uppercase mt-1">적극적 참여(X)</div>
+                    </div>
                 </div>
 
                 <div class="bg-slate-900 text-white p-6 rounded-3xl space-y-4 shadow-xl">
@@ -143,66 +134,61 @@
                     </div>
                 </div>
 
-                <div class="flex flex-col sm:flex-row gap-3">
+                <div class="flex flex-col sm:flex-row gap-3 no-print">
                     <button onclick="resetQuiz()" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-4 rounded-2xl flex items-center justify-center gap-2 transition-all">
                         <i data-lucide="refresh-ccw" class="w-5 h-5"></i> 다시 진단하기
                     </button>
                     <button onclick="window.print()" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-2xl flex items-center justify-center gap-2 shadow-lg shadow-blue-100 transition-all">
-                        <i data-lucide="download" class="w-5 h-5"></i> 결과 저장 (PDF)
+                        <i data-lucide="file-text" class="w-5 h-5"></i> 결과 저장 (PDF)
                     </button>
                 </div>
             </div>
         </div>
 
-        <div class="bg-slate-50 p-4 border-t border-slate-100 text-center">
+        <div class="bg-slate-50 p-4 border-t border-slate-100 text-center no-print">
             <p class="text-[10px] text-slate-400 font-medium uppercase tracking-widest">
-                Followership Style Assessment (Based on Robert E. Kelley)
+                Kelley's Followership Model • Ver 2.1
             </p>
         </div>
     </div>
 
     <script>
-        // --- Data ---
-        // image_63aba8.png 문항 적용
-        // image_63aba4.png 카테고리 적용 (Y: 독립적 사고, X: 적극적 참여)
         const questions = [
             { id: 1,  category: 'Y', text: "당신의 일은 자신에게 중요한 사회적 목표나 개인적인 꿈을 성취하는데 도움이 되는가?" },
             { id: 2,  category: 'X', text: "당신은 개인의 업무 목표가 조직의 최고 목표와 조화되어야 한다고 생각하는가?" },
-            { id: 3,  category: 'X', text: "당신은 최선의 아이디어와 능력을 속한 조직과 일에 쏟아 붓고, 헌신적이며 정열적으로 일하는가?" },
-            { id: 4,  category: 'X', text: "당신의 열의가 확산되어 동료(친구, 후배, 동기)들을 활기차게 만드는가?" },
-            { id: 5,  category: 'Y', text: "리더의 지시를 기다리거나 단순히 떠 맡는 것이 아니라, 조직에 가장 중요한 목표를 성취하기 위해서는 무엇이 제일 중요한 조직활동인가를 자신이 직접 판단하는가?" },
-            { id: 6,  category: 'X', text: "리더와 조직에 더욱 가치 있는 사람이 되기 위해서 당신은 그런 중요한 활동 속에서 독특한 능력을 적극적으로 발휘하는가?" },
-            { id: 7,  category: 'X', text: "새로운 일이나 임무가 시작되었을 때 리더가 중요한 의미라고 생각하는 업무에서 곧바로 성과/업적을 만드는가?" },
-            { id: 8,  category: 'X', text: "당신이 기한 안에 일을 훌륭히 해낼 뿐만 아니라, 때로 당신이 '부족한 점을 채울' 것이라는 점을 믿고 리더가 어려운 임무를 당신에게 맡기는가?" },
-            { id: 9,  category: 'X', text: "당신은 자신의 임무 범위를 벗어나는 일도 찾아내서 성공적으로 완수하기 위해 솔선수범 하는가?" },
-            { id: 10, category: 'X', text: "집단 프로젝트의 리더가 아닐 때도, 맡은 일보다 많은 일을 하고 능력껏 공헌을 하는가?" },
-            { id: 11, category: 'Y', text: "리더나 조직의 목표에 크게 공헌할 수 있는 새로운 아이디어를 독자적으로 고안해서 적극적으로 제기하는가?" },
-            { id: 12, category: 'Y', text: "리더에게 의존해서 어려운 문제들(기술적인 것이든 조직적인 것이든)을 해결하기 보다는 스스로 해결하려고 하는가?" },
-            { id: 13, category: 'X', text: "자신은 아무런 인정을 받지 못하더라도 다른 동료들이 좋은 평가를 받도록 돕는가?" },
-            { id: 14, category: 'Y', text: "필요할 경우 일부러 반대의견을 개진해서라도 리더와 그룹이 아이디어나 계획의 상향 잠재력과 하향 위험성 모두를 볼 수 있도록 돕는가?" },
-            { id: 15, category: 'X', text: "리더의 요구나 목표, 제약을 이해하고, 그것들을 충족시키기 위해서 열심히 일하는가?" },
-            { id: 16, category: 'Y', text: "자신에 대한 평가를 미루기 보다는 장점과 약점을 적극적이고 솔직하게 인정하는가?" },
-            { id: 17, category: 'Y', text: "요구 받은 일만을 하는 데서 탈피해 리더가 내린 판단이 얼마나 현명한가를 스스로 평가해 보는 습관이 있는가?" },
-            { id: 18, category: 'Y', text: "리더가 전문분야나 개인적인 흥미에 정면으로 배치되는 일을 해달라고 부탁할 때 '싫다'고 하는가?" },
-            { id: 19, category: 'Y', text: "리더나 집단의 기준이 아니라 자신의 윤리적 기준에 따라 행동 하는가?" },
-            { id: 20, category: 'Y', text: "당신이 속한 집단과 갈등하거나 리더로부터 보복을 당한다고 해도 당신은 중요한 이슈에 대해서 자기 견해를 주장하는가?" }
+            { id: 3,  category: 'X', text: "당신은 최선의 아이디어와 능력을 조직에 쏟아 붓고 헌신적이며 정열적으로 일하는가?" },
+            { id: 4,  category: 'X', text: "당신의 열의가 확산되어 주변 동료(친구, 후배, 동기)들을 활기차게 만드는가?" },
+            { id: 5,  category: 'Y', text: "리더의 지시를 기다리기보다 목표 성취를 위해 무엇이 가장 중요한 활동인지 직접 판단하는가?" },
+            { id: 6,  category: 'X', text: "리더와 조직에 가치 있는 사람이 되기 위해 자신의 독특한 능력을 적극적으로 발휘하는가?" },
+            { id: 7,  category: 'X', text: "새로운 업무가 시작되었을 때 리더가 중요하다고 생각하는 분야에서 곧바로 성과를 내는가?" },
+            { id: 8,  category: 'X', text: "리더가 당신의 능력을 신뢰하여 기한 안에 어려운 임무를 완수할 것이라고 믿고 맡기는가?" },
+            { id: 9,  category: 'X', text: "당신은 자신의 임무 범위를 벗어나는 일도 조직을 위해 솔선수범하여 완수하는가?" },
+            { id: 10, category: 'X', text: "리더가 아닐 때도 맡은 일 이상의 공헌을 하며 팀에 기여하는가?" },
+            { id: 11, category: 'Y', text: "조직의 목표에 크게 공헌할 수 있는 새로운 아이디어를 독자적으로 고안하고 제기하는가?" },
+            { id: 12, category: 'Y', text: "어려운 문제를 리더에게 의존하기보다 스스로 해결책을 찾으려 노력하는가?" },
+            { id: 13, category: 'X', text: "자신이 인정을 받지 못하더라도 동료들이 좋은 평가를 받을 수 있도록 돕는가?" },
+            { id: 14, category: 'Y', text: "필요한 경우 반대 의견을 개진해서라도 조직이 계획의 위험성과 기회를 모두 보게 돕는가?" },
+            { id: 15, category: 'X', text: "리더의 요구나 제약을 이해하고 이를 충족시키기 위해 최선을 다하는가?" },
+            { id: 16, category: 'Y', text: "자신에 대한 평가를 미루지 않고 장점과 약점을 솔직하게 인정하고 보완하는가?" },
+            { id: 17, category: 'Y', text: "요구받은 일만 하기보다 리더의 판단이 얼마나 현명한지 스스로 평가해보는 습관이 있는가?" },
+            { id: 18, category: 'Y', text: "리더가 본인의 전문성이나 신념에 반하는 일을 부탁할 때 '아니오'라고 말할 수 있는가?" },
+            { id: 19, category: 'Y', text: "리더나 조직의 기준이 아니라 자신의 윤리적 기준에 따라 소신껏 행동하는가?" },
+            { id: 20, category: 'Y', text: "조직과 갈등하거나 보복을 당할 위험이 있더라도 중요한 이슈에 대해 견해를 주장하는가?" }
         ];
 
         const types = {
-            EXEMPLARY: { name: "모범형 (Exemplary)", description: "독립적이며 열정적인 '파트너'", details: "비판적 사고와 적극적 참여가 모두 높습니다. 리더의 보좌관이자 조직의 핵심 엔진 역할을 합니다.", advice: "리더와의 전략적 파트너십을 더욱 강화하고, 후배 팔로워들의 성장을 돕는 멘토 역할을 수행하세요.", color: "bg-blue-500", icon: "award" },
-            ALIENATED: { name: "소외형 (Alienated)", description: "비판적이지만 냉소적인 '방관자'", details: "사고력은 뛰어나지만 참여도가 낮습니다. 조직에 대한 실망감이 냉소주의로 변했을 수 있습니다.", advice: "비판을 해결책 제시로 전환하세요. 본인의 뛰어난 분석력을 조직의 실제 성과로 연결하는 도전이 필요합니다.", color: "bg-red-500", icon: "shield-alert" },
-            CONFORMIST: { name: "순응형 (Conformist)", description: "충성스럽지만 주관 없는 '예스맨'", details: "참여도는 높으나 독립적 사고가 부족합니다. 리더의 결정에 무조건적으로 따르는 경향이 있습니다.", advice: "건강한 반론을 제기하는 훈련을 하세요. 자신의 전문성을 바탕으로 독립적인 판단을 내리는 습관이 중요합니다.", color: "bg-yellow-500", icon: "user" },
-            PASSIVE: { name: "수동형 (Passive)", description: "시키면 시키는 것만 하는 '양(Sheep)'", details: "사고와 참여 모두가 낮습니다. 업무 의욕이 상실되었거나 단순히 지시를 따르기만 하는 상태입니다.", advice: "작은 성공(Small Win)을 통해 효능감을 회복하세요. 자신의 업무가 조직에 미치는 영향을 다시 확인해보세요.", color: "bg-gray-500", icon: "zap" },
-            PRAGMATIST: { name: "실무형 (Pragmatist)", description: "대세를 따르며 생존하는 '정치인'", details: "두 차원 모두 중간 정도의 수준을 유지하며 상황에 맞게 적절히 처신하는 생존 전략가입니다.", advice: "때로는 본인의 신념을 걸고 적극적으로 의견을 개진해보세요. 안전함을 넘어 변화를 주도하는 시도가 필요합니다.", color: "bg-green-500", icon: "target" }
+            EXEMPLARY: { name: "모범형 (Exemplary)", description: "독립적이며 열정적인 '파트너'", details: "비판적 사고와 적극적 참여가 모두 높습니다. 리더와 대등한 파트너로서 조직의 핵심 엔진 역할을 수행합니다.", advice: "리더와의 전략적 파트너십을 더욱 강화하고 후배들의 성장을 돕는 멘토 역할을 수행하십시오.", color: "bg-blue-500", icon: "award" },
+            ALIENATED: { name: "소외형 (Alienated)", description: "비판적이지만 냉소적인 '방관자'", details: "사고력은 뛰어나지만 참여도가 낮습니다. 과거의 실망이 냉소주의로 변해 있을 가능성이 큽니다.", advice: "비판을 위한 비판에서 벗어나 실제적인 대안과 해결책을 제시하여 조직에 기여해보십시오.", color: "bg-red-500", icon: "shield-alert" },
+            CONFORMIST: { name: "순응형 (Conformist)", description: "충성스럽지만 주관 없는 '예스맨'", details: "참여도는 높으나 독립적 사고가 부족합니다. 리더의 결정에 무조건 따르는 경향이 있습니다.", advice: "건강한 반론을 제기하는 훈련이 필요합니다. 리더의 결정을 보완할 수 있는 본인만의 의견을 가져보십시오.", color: "bg-yellow-500", icon: "user-check" },
+            PASSIVE: { name: "수동형 (Passive)", description: "시키면 시키는 것만 하는 '양(Sheep)'", details: "사고와 참여 모두가 낮습니다. 업무 의욕이 상실되었거나 단순히 지시를 기다리기만 하는 상태입니다.", advice: "작은 성공부터 시작해 효능감을 회복하십시오. 자신의 업무 가치를 다시 정의해보는 시간이 필요합니다.", color: "bg-slate-400", icon: "zap" },
+            PRAGMATIST: { name: "실무형 (Pragmatist)", description: "대세를 따르며 생존하는 '정치인'", details: "상황에 따라 적절히 처신하는 생존 전략가입니다. 모험을 피하고 조직의 대세를 따르는 경향이 있습니다.", advice: "안전을 넘어 변화를 주도해보십시오. 본인의 신념을 걸고 적극적으로 목소리를 내는 시도가 필요합니다.", color: "bg-emerald-500", icon: "target" }
         };
 
         let currentIdx = 0;
         let answers = {};
 
         function showScreen(screenId) {
-            ['welcome-screen', 'quiz-screen', 'result-screen'].forEach(id => {
-                document.getElementById(id).classList.add('hidden');
-            });
+            ['welcome-screen', 'quiz-screen', 'result-screen'].forEach(id => document.getElementById(id).classList.add('hidden'));
             document.getElementById(screenId).classList.remove('hidden');
             document.getElementById('quiz-progress-text').classList.toggle('hidden', screenId !== 'quiz-screen');
         }
@@ -226,39 +212,25 @@
 
         function handleAnswer(val) {
             answers[questions[currentIdx].id] = val;
-            if (currentIdx < questions.length - 1) {
-                currentIdx++; updateQuestion();
-            } else {
-                calculateResult();
-            }
+            if (currentIdx < questions.length - 1) { currentIdx++; updateQuestion(); }
+            else { calculateResult(); }
         }
 
-        function prevQuestion() {
-            if (currentIdx > 0) { currentIdx--; updateQuestion(); }
-        }
+        function prevQuestion() { if (currentIdx > 0) { currentIdx--; updateQuestion(); } }
 
         function calculateResult() {
-            let xTotal = 0; // 적극적 참여
-            let yTotal = 0; // 독립적 사고
-            
+            let xTotal = 0, yTotal = 0;
             Object.keys(answers).forEach(id => {
                 const q = questions.find(item => item.id === parseInt(id));
-                if (q.category === 'X') xTotal += answers[id];
-                else yTotal += answers[id];
+                if (q.category === 'X') xTotal += answers[id]; else yTotal += answers[id];
             });
 
-            // 유형 판별 (60점 만점 기준 임계치 36점 이상을 '높음'으로 설정)
             let finalType;
             const threshold = 36;
-            
             if (yTotal >= threshold && xTotal >= threshold) finalType = types.EXEMPLARY;
             else if (yTotal >= threshold && xTotal < threshold) finalType = types.ALIENATED;
             else if (yTotal < threshold && xTotal >= threshold) finalType = types.CONFORMIST;
-            else {
-                if (yTotal >= 24 && xTotal >= 24) finalType = types.PRAGMATIST; // 24~35 사이는 실무형
-                else finalType = types.PASSIVE;
-            }
-
+            else { finalType = (yTotal >= 24 && xTotal >= 24) ? types.PRAGMATIST : types.PASSIVE; }
             displayResult(finalType, xTotal, yTotal);
         }
 
@@ -270,20 +242,16 @@
             document.getElementById('result-advice').innerText = type.advice;
             document.getElementById('score-x').innerHTML = `${x} <span class="text-sm font-normal text-slate-400">/ 60</span>`;
             document.getElementById('score-y').innerHTML = `${y} <span class="text-sm font-normal text-slate-400">/ 60</span>`;
-
-            const iconContainer = document.getElementById('result-icon-container');
-            iconContainer.innerHTML = `<i data-lucide="${type.icon}" class="w-12 h-12 ${type.color.replace('bg-', 'text-')}"></i>`;
-            
+            document.getElementById('result-icon-container').innerHTML = `<i data-lucide="${type.icon}" class="w-12 h-12 ${type.color.replace('bg-', 'text-')}"></i>`;
             const dot = document.getElementById('result-dot');
-            dot.className = `absolute w-4 h-4 rounded-full border-2 border-white shadow-lg transition-all duration-1000 ${type.color}`;
+            dot.className = `absolute w-5 h-5 rounded-full border-4 border-white shadow-xl transition-all duration-1000 ${type.color}`;
             dot.style.left = `${(x / 60) * 100}%`;
             dot.style.bottom = `${(y / 60) * 100}%`;
-
             lucide.createIcons();
         }
 
         function resetQuiz() { showScreen('welcome-screen'); }
-        window.onload = () => { lucide.createIcons(); };
+        window.onload = () => lucide.createIcons();
     </script>
 </body>
 </html>

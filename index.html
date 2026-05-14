@@ -3,199 +3,112 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>팔로워십 진단 PRO</title>
-    
-    <!-- 모바일 앱 환경 설정 (PWA) -->
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="팔로워십">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="theme-color" content="#0f172a">
-
-    <!-- 팔로워십 아이콘 (SVG 내장) -->
-    <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='100' fill='%230f172a'/%3E%3Cpath d='M256 150c-33 0-60 27-60 60s27 60 60 60 60-27 60-60-27-60-60-60zm-80 180c-44 0-80 36-80 80v20h320v-20c0-44-36-80-80-80h-160z' fill='%233b82f6'/%3E%3Cpath d='M380 200c-22 0-40 18-40 40s18 40 40 40 40-18 40-40-18-40-40-40zm-40 120c-33 0-60 27-60 60v15h200v-15c0-33-27-60-60-60h-80z' fill='%2394a3b8'/%3E%3C/svg%3E">
-    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='100' fill='%230f172a'/%3E%3Cpath d='M256 150c-33 0-60 27-60 60s27 60 60 60 60-27 60-60-27-60-60-60zm-80 180c-44 0-80 36-80 80v20h320v-20c0-44-36-80-80-80h-160z' fill='%233b82f6'/%3E%3C/svg%3E">
-
+    <title>팔로워십 진단 PRO v2.8</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
-        body { font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
+        body { font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; background-color: #f8fafc; }
+        .hidden { display: none !important; }
         .animate-fade-in { animation: fadeIn 0.5s ease-out; }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .option-btn { @apply flex flex-col items-center justify-center p-3 rounded-xl border-2 border-slate-100 hover:border-blue-500 hover:bg-blue-50 transition-all text-center; }
-        @media print { .no-print { display: none; } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .option-btn { border: 2px solid #f1f5f9; padding: 12px; border-radius: 16px; transition: all 0.2s; cursor: pointer; text-align: center; background: white; }
+        .option-btn:hover { border-color: #3b82f6; background-color: #eff6ff; transform: translateY(-2px); }
+        .option-btn:active { transform: scale(0.95); }
     </style>
 </head>
-<body class="bg-slate-50 min-h-screen flex items-center justify-center p-4">
+<body class="p-4 flex items-center justify-center min-h-screen">
 
     <div id="app-container" class="max-w-2xl w-full bg-white rounded-3xl shadow-2xl overflow-hidden animate-fade-in">
-        <!-- Header -->
-        <div class="bg-slate-900 text-white p-6 flex items-center justify-between no-print">
-            <div class="flex items-center gap-2">
-                <i data-lucide="users" class="w-6 h-6 text-blue-400"></i>
-                <h1 class="text-xl font-bold tracking-tight">Followership Assessment</h1>
-            </div>
+        <div class="bg-slate-900 text-white p-6 flex items-center justify-between">
+            <h1 class="text-xl font-bold tracking-tight">Followership Assessment</h1>
             <div id="quiz-progress-text" class="hidden text-sm font-medium text-slate-400"></div>
         </div>
 
-        <!-- Main Content Area -->
         <div id="main-content" class="p-8">
-            <!-- Welcome Screen -->
-            <div id="welcome-screen" class="text-center space-y-6 py-10">
-                <div class="bg-blue-50 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <i data-lucide="target" class="w-10 h-10 text-blue-600"></i>
+            <div id="welcome-screen" class="text-center space-y-8 py-10">
+                <div class="space-y-4">
+                    <h2 class="text-4xl font-black text-slate-900">팔로워십 유형 진단</h2>
+                    <p class="text-slate-500 text-sm">로버트 켈리 모델을 기반으로 당신의 업무 스타일을 분석합니다.</p>
                 </div>
-                <h2 class="text-3xl font-extrabold text-slate-900">Followership Style 진단</h2>
-                <div class="text-slate-600 space-y-4 max-w-md mx-auto text-sm leading-relaxed">
-                    <p>로버트 켈리(Robert Kelley)의 모델을 바탕으로 당신의 팔로워십 유형을 진단합니다.</p>
-                    <div class="bg-slate-50 p-3 rounded-lg border border-slate-200 font-bold text-slate-800">
-                        0(거의 드물다) ~ 6(거의 언제나)
-                    </div>
+                <div class="max-w-xs mx-auto">
+                    <input type="text" id="user-name" placeholder="성함을 입력하세요" class="w-full p-4 border-2 border-slate-100 rounded-2xl outline-none text-center text-lg font-bold focus:border-blue-500">
                 </div>
-                <button onclick="startQuiz()" class="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-12 rounded-2xl transition-all hover:scale-105 active:scale-95 shadow-lg shadow-blue-200">
+                <button onclick="startQuiz()" class="w-full sm:w-auto bg-blue-600 text-white font-bold py-4 px-12 rounded-2xl shadow-lg hover:bg-blue-700 transition-all">
                     진단 시작하기
                 </button>
             </div>
 
-            <!-- Quiz Screen -->
-            <div id="quiz-screen" class="hidden space-y-8 animate-fade-in">
-                <div class="space-y-2">
-                    <div class="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
-                        <div id="progress-bar" class="h-full bg-blue-500 transition-all duration-300" style="width: 0%"></div>
-                    </div>
-                    <p id="category-label" class="text-xs font-bold text-blue-600 uppercase tracking-widest text-center"></p>
+            <div id="quiz-screen" class="hidden space-y-8">
+                <div class="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
+                    <div id="progress-bar" class="h-full bg-blue-500 transition-all duration-300"></div>
                 </div>
-
-                <div class="min-h-[140px] flex flex-col items-center justify-center">
-                    <span id="question-number" class="text-blue-500 font-bold mb-2 text-lg">Q1.</span>
-                    <h3 id="question-text" class="text-xl font-bold text-center text-slate-900 leading-snug"></h3>
+                <div class="text-center">
+                    <span id="question-number" class="text-blue-500 font-bold text-lg"></span>
+                    <h3 id="question-text" class="text-xl font-bold text-slate-900 mt-2 leading-relaxed"></h3>
                 </div>
-
-                <div class="grid grid-cols-7 gap-1 md:gap-2">
-                    {[0, 1, 2, 3, 4, 5, 6].map(num => (
-                        `<button onclick="handleAnswer(${num})" class="option-btn">
-                            <span class="text-[10px] text-slate-400 mb-1">${num===0?'드묾':num===3?'보통':num===6?'항상':'.'}</span>
-                            <span class="font-bold text-lg">${num}</span>
-                        </button>`
-                    )).join('')}
-                </div>
-
-                <button id="prev-btn" onclick="prevQuestion()" class="flex items-center gap-1 text-slate-400 hover:text-slate-600 transition-colors pt-4">
-                    <i data-lucide="chevron-left" class="w-4 h-4"></i> 이전 문항
+                <div id="options-container" class="grid grid-cols-7 gap-2"></div>
+                <button id="prev-btn" onclick="prevQuestion()" class="text-slate-400 font-medium hover:text-slate-600 flex items-center gap-2">
+                    ← 이전 문항
                 </button>
             </div>
 
-            <!-- Result Screen -->
-            <div id="result-screen" class="hidden space-y-8 animate-fade-in">
-                <div class="text-center space-y-4">
-                    <div id="result-icon-container" class="inline-flex p-4 rounded-3xl bg-slate-50 mb-2"></div>
+            <div id="result-screen" class="hidden space-y-8 animate-fade-in text-center">
+                <div class="space-y-2">
                     <h3 id="result-name" class="text-4xl font-black text-slate-900"></h3>
-                    <p id="result-desc" class="text-xl font-medium text-blue-600"></p>
+                    <p id="result-desc" class="text-xl font-bold text-blue-600"></p>
                 </div>
-
-                <!-- Quadrant Chart -->
-                <div class="relative aspect-square w-full max-w-[300px] mx-auto border-2 border-slate-200 rounded-lg p-2 bg-slate-50 overflow-hidden shadow-inner">
-                    <div class="absolute inset-0 flex items-center justify-center opacity-20">
-                        <div class="w-full h-[1px] bg-slate-400"></div>
-                        <div class="h-full w-[1px] bg-slate-400 absolute"></div>
-                    </div>
-                    <span class="absolute top-2 left-2 text-[10px] font-bold text-slate-400 uppercase">소외형</span>
-                    <span class="absolute top-2 right-2 text-[10px] font-bold text-slate-400 uppercase">모범형</span>
-                    <span class="absolute bottom-2 left-2 text-[10px] font-bold text-slate-400 uppercase">수동형</span>
-                    <span class="absolute bottom-2 right-2 text-[10px] font-bold text-slate-400 uppercase">순응형</span>
-                    <div id="result-dot" class="absolute w-4 h-4 rounded-full border-2 border-white shadow-lg transition-all duration-1000 bg-blue-500 z-10" style="left: 50%; bottom: 50%; transform: translate(-50%, 50%);"></div>
-                    <div class="absolute -bottom-1 left-1/2 -translate-x-1/2 text-[8px] font-black text-slate-400 uppercase tracking-tighter">적극적 참여(X)</div>
-                    <div class="absolute -left-12 top-1/2 -translate-y-1/2 -rotate-90 text-[8px] font-black text-slate-400 uppercase tracking-tighter">독립적 사고(Y)</div>
+                <div class="bg-slate-50 p-6 rounded-3xl text-left space-y-4">
+                    <div><h4 class="text-xs font-bold text-slate-400 uppercase tracking-widest">상세 분석</h4><p id="result-details" class="text-slate-700 mt-1"></p></div>
+                    <div class="pt-4 border-t border-slate-200"><h4 class="text-xs font-bold text-green-500 uppercase tracking-widest">성장 제언</h4><p id="result-advice" class="text-slate-700 mt-1 font-medium"></p></div>
                 </div>
-
-                <div class="grid grid-cols-2 gap-4 text-center">
-                    <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100 shadow-sm">
-                        <div id="score-y" class="text-2xl font-black text-slate-900">0 <span class="text-sm font-normal text-slate-400">/ 60</span></div>
-                        <div class="text-[10px] font-bold text-slate-500 uppercase mt-1">독립적 사고(Y)</div>
-                    </div>
-                    <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100 shadow-sm">
-                        <div id="score-x" class="text-2xl font-black text-slate-900">0 <span class="text-sm font-normal text-slate-400">/ 60</span></div>
-                        <div class="text-[10px] font-bold text-slate-500 uppercase mt-1">적극적 참여(X)</div>
-                    </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="bg-blue-50 p-4 rounded-2xl"><div id="score-y" class="text-2xl font-black"></div><div class="text-[10px] text-blue-400 font-bold">독립적 사고</div></div>
+                    <div class="bg-blue-50 p-4 rounded-2xl"><div id="score-x" class="text-2xl font-black"></div><div class="text-[10px] text-blue-400 font-bold">적극적 참여</div></div>
                 </div>
-
-                <div class="bg-slate-900 text-white p-6 rounded-3xl space-y-4 shadow-xl">
-                    <div>
-                        <h4 class="text-blue-400 text-xs font-bold uppercase tracking-widest mb-1">상세 분석</h4>
-                        <p id="result-details" class="text-slate-300 text-sm leading-relaxed"></p>
-                    </div>
-                    <div class="pt-4 border-t border-slate-800">
-                        <h4 class="text-green-400 text-xs font-bold uppercase tracking-widest mb-1">성장 제언</h4>
-                        <p id="result-advice" class="text-slate-300 text-sm leading-relaxed"></p>
-                    </div>
-                </div>
-
-                <div class="flex flex-col sm:flex-row gap-3 no-print">
-                    <button onclick="resetQuiz()" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-4 rounded-2xl flex items-center justify-center gap-2 transition-all">
-                        <i data-lucide="refresh-ccw" class="w-5 h-5"></i> 다시 진단하기
-                    </button>
-                    <button onclick="window.print()" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-2xl flex items-center justify-center gap-2 shadow-lg shadow-blue-100 transition-all">
-                        <i data-lucide="file-text" class="w-5 h-5"></i> 결과 저장 (PDF)
-                    </button>
-                </div>
+                <button onclick="location.reload()" class="w-full bg-slate-100 py-4 rounded-2xl font-bold text-slate-600">다시 진단하기</button>
             </div>
-        </div>
-
-        <div class="bg-slate-50 p-4 border-t border-slate-100 text-center no-print">
-            <p class="text-[10px] text-slate-400 font-medium uppercase tracking-widest">
-                Kelley's Followership Model • Ver 2.1
-            </p>
         </div>
     </div>
 
     <script>
         const questions = [
-            { id: 1,  category: 'Y', text: "당신의 일은 자신에게 중요한 사회적 목표나 개인적인 꿈을 성취하는데 도움이 되는가?" },
-            { id: 2,  category: 'X', text: "당신은 개인의 업무 목표가 조직의 최고 목표와 조화되어야 한다고 생각하는가?" },
-            { id: 3,  category: 'X', text: "당신은 최선의 아이디어와 능력을 조직에 쏟아 붓고 헌신적이며 정열적으로 일하는가?" },
-            { id: 4,  category: 'X', text: "당신의 열의가 확산되어 주변 동료(친구, 후배, 동기)들을 활기차게 만드는가?" },
-            { id: 5,  category: 'Y', text: "리더의 지시를 기다리기보다 목표 성취를 위해 무엇이 가장 중요한 활동인지 직접 판단하는가?" },
-            { id: 6,  category: 'X', text: "리더와 조직에 가치 있는 사람이 되기 위해 자신의 독특한 능력을 적극적으로 발휘하는가?" },
-            { id: 7,  category: 'X', text: "새로운 업무가 시작되었을 때 리더가 중요하다고 생각하는 분야에서 곧바로 성과를 내는가?" },
-            { id: 8,  category: 'X', text: "리더가 당신의 능력을 신뢰하여 기한 안에 어려운 임무를 완수할 것이라고 믿고 맡기는가?" },
-            { id: 9,  category: 'X', text: "당신은 자신의 임무 범위를 벗어나는 일도 조직을 위해 솔선수범하여 완수하는가?" },
+            { id: 1, category: 'Y', text: "당신의 일은 자신에게 중요한 사회적 목표나 꿈을 성취하는데 도움이 되는가?" },
+            { id: 2, category: 'X', text: "당신은 개인의 목표가 조직의 목표와 조화되어야 한다고 생각하는가?" },
+            { id: 3, category: 'X', text: "당신은 최선의 아이디어와 능력을 조직에 쏟아 부으며 열정적으로 일하는가?" },
+            { id: 4, category: 'X', text: "당신의 열의가 확산되어 주변 동료들을 활기차게 만드는가?" },
+            { id: 5, category: 'Y', text: "지시를 기다리기보다 무엇이 가장 중요한 활동인지 직접 판단하는가?" },
+            { id: 6, category: 'X', text: "조직에 가치 있는 사람이 되기 위해 자신의 독특한 능력을 적극 발휘하는가?" },
+            { id: 7, category: 'X', text: "새 업무가 시작되었을 때 리더가 원하는 분야에서 곧바로 성과를 내는가?" },
+            { id: 8, category: 'X', text: "리더가 당신을 신뢰하여 어려운 임무를 기한 안에 맡기는가?" },
+            { id: 9, category: 'X', text: "임무 범위를 벗어나는 일도 조직을 위해 솔선수범하여 완수하는가?" },
             { id: 10, category: 'X', text: "리더가 아닐 때도 맡은 일 이상의 공헌을 하며 팀에 기여하는가?" },
-            { id: 11, category: 'Y', text: "조직의 목표에 크게 공헌할 수 있는 새로운 아이디어를 독자적으로 고안하고 제기하는가?" },
-            { id: 12, category: 'Y', text: "어려운 문제를 리더에게 의존하기보다 스스로 해결책을 찾으려 노력하는가?" },
-            { id: 13, category: 'X', text: "자신이 인정을 받지 못하더라도 동료들이 좋은 평가를 받을 수 있도록 돕는가?" },
-            { id: 14, category: 'Y', text: "필요한 경우 반대 의견을 개진해서라도 조직이 계획의 위험성과 기회를 모두 보게 돕는가?" },
+            { id: 11, category: 'Y', text: "조직 목표에 공헌할 수 있는 새로운 아이디어를 독자적으로 제안하는가?" },
+            { id: 12, category: 'Y', text: "어려운 문제를 리더에게 의존하기보다 스스로 해결책을 찾으려 하는가?" },
+            { id: 13, category: 'X', text: "자신이 인정을 받지 못하더라도 동료들이 좋은 평가를 받도록 돕는가?" },
+            { id: 14, category: 'Y', text: "필요한 경우 반대 의견을 내서라도 조직이 위험을 보게 돕는가?" },
             { id: 15, category: 'X', text: "리더의 요구나 제약을 이해하고 이를 충족시키기 위해 최선을 다하는가?" },
-            { id: 16, category: 'Y', text: "자신에 대한 평가를 미루지 않고 장점과 약점을 솔직하게 인정하고 보완하는가?" },
-            { id: 17, category: 'Y', text: "요구받은 일만 하기보다 리더의 판단이 얼마나 현명한지 스스로 평가해보는 습관이 있는가?" },
-            { id: 18, category: 'Y', text: "리더가 본인의 전문성이나 신념에 반하는 일을 부탁할 때 '아니오'라고 말할 수 있는가?" },
-            { id: 19, category: 'Y', text: "리더나 조직의 기준이 아니라 자신의 윤리적 기준에 따라 소신껏 행동하는가?" },
-            { id: 20, category: 'Y', text: "조직과 갈등하거나 보복을 당할 위험이 있더라도 중요한 이슈에 대해 견해를 주장하는가?" }
+            { id: 16, category: 'Y', text: "자신의 장점과 약점을 솔직하게 인정하고 보완하려 노력하는가?" },
+            { id: 17, category: 'Y', text: "요구받은 일만 하기보다 리더의 판단이 현명한지 스스로 평가해보는가?" },
+            { id: 18, category: 'Y', text: "리더가 본인의 전문성에 반하는 일을 부탁할 때 '아니오'라고 말할 수 있는가?" },
+            { id: 19, category: 'Y', text: "조직의 기준이 아니라 자신의 윤리적 기준에 따라 소신껏 행동하는가?" },
+            { id: 20, category: 'Y', text: "조직과 갈등할 위험이 있더라도 중요한 이슈에 대해 견해를 주장하는가?" }
         ];
-
-        const types = {
-            EXEMPLARY: { name: "모범형 (Exemplary)", description: "독립적이며 열정적인 '파트너'", details: "비판적 사고와 적극적 참여가 모두 높습니다. 리더와 대등한 파트너로서 조직의 핵심 엔진 역할을 수행합니다.", advice: "리더와의 전략적 파트너십을 더욱 강화하고 후배들의 성장을 돕는 멘토 역할을 수행하십시오.", color: "bg-blue-500", icon: "award" },
-            ALIENATED: { name: "소외형 (Alienated)", description: "비판적이지만 냉소적인 '방관자'", details: "사고력은 뛰어나지만 참여도가 낮습니다. 과거의 실망이 냉소주의로 변해 있을 가능성이 큽니다.", advice: "비판을 위한 비판에서 벗어나 실제적인 대안과 해결책을 제시하여 조직에 기여해보십시오.", color: "bg-red-500", icon: "shield-alert" },
-            CONFORMIST: { name: "순응형 (Conformist)", description: "충성스럽지만 주관 없는 '예스맨'", details: "참여도는 높으나 독립적 사고가 부족합니다. 리더의 결정에 무조건 따르는 경향이 있습니다.", advice: "건강한 반론을 제기하는 훈련이 필요합니다. 리더의 결정을 보완할 수 있는 본인만의 의견을 가져보십시오.", color: "bg-yellow-500", icon: "user-check" },
-            PASSIVE: { name: "수동형 (Passive)", description: "시키면 시키는 것만 하는 '양(Sheep)'", details: "사고와 참여 모두가 낮습니다. 업무 의욕이 상실되었거나 단순히 지시를 기다리기만 하는 상태입니다.", advice: "작은 성공부터 시작해 효능감을 회복하십시오. 자신의 업무 가치를 다시 정의해보는 시간이 필요합니다.", color: "bg-slate-400", icon: "zap" },
-            PRAGMATIST: { name: "실무형 (Pragmatist)", description: "대세를 따르며 생존하는 '정치인'", details: "상황에 따라 적절히 처신하는 생존 전략가입니다. 모험을 피하고 조직의 대세를 따르는 경향이 있습니다.", advice: "안전을 넘어 변화를 주도해보십시오. 본인의 신념을 걸고 적극적으로 목소리를 내는 시도가 필요합니다.", color: "bg-emerald-500", icon: "target" }
-        };
 
         let currentIdx = 0;
         let answers = {};
-
-        function showScreen(screenId) {
-            ['welcome-screen', 'quiz-screen', 'result-screen'].forEach(id => document.getElementById(id).classList.add('hidden'));
-            document.getElementById(screenId).classList.remove('hidden');
-            document.getElementById('quiz-progress-text').classList.toggle('hidden', screenId !== 'quiz-screen');
-        }
+        let userName = "";
+        
+        // 상우님의 Apps Script URL 적용됨
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbzgTg3NbvTwk6-yrDODI7-25rmtI4iNgZeS2x6QcxCdgvyWivVN-iskKB35zinbvkscRQ/exec'; 
 
         function startQuiz() {
-            currentIdx = 0; answers = {};
-            showScreen('quiz-screen');
+            const input = document.getElementById('user-name');
+            userName = input ? input.value.trim() : "";
+            if(!userName) { alert("성함을 입력해주세요."); return; }
+            
+            document.getElementById('welcome-screen').classList.add('hidden');
+            document.getElementById('quiz-screen').classList.remove('hidden');
+            document.getElementById('quiz-progress-text').classList.remove('hidden');
             updateQuestion();
         }
 
@@ -203,17 +116,29 @@
             const q = questions[currentIdx];
             document.getElementById('question-number').innerText = `Q${currentIdx + 1}.`;
             document.getElementById('question-text').innerText = q.text;
-            document.getElementById('category-label').innerText = q.category === 'Y' ? '독립적·비판적 사고' : '적극적·능동적 참여';
             document.getElementById('quiz-progress-text').innerText = `${currentIdx + 1} / ${questions.length}`;
             document.getElementById('progress-bar').style.width = `${((currentIdx + 1) / questions.length) * 100}%`;
-            document.getElementById('prev-btn').classList.toggle('invisible', currentIdx === 0);
-            lucide.createIcons();
+            
+            const btnPrev = document.getElementById('prev-btn');
+            if(currentIdx > 0) btnPrev.classList.remove('hidden'); else btnPrev.classList.add('hidden');
+
+            const optionsContainer = document.getElementById('options-container');
+            optionsContainer.innerHTML = [0, 1, 2, 3, 4, 5, 6].map(num => `
+                <div onclick="handleAnswer(${num})" class="option-btn">
+                    <span class="text-[10px] text-slate-400">${num===0?'드묾':num===3?'보통':num===6?'항상':'.'}</span>
+                    <div class="font-bold text-lg">${num}</div>
+                </div>
+            `).join('');
         }
 
         function handleAnswer(val) {
             answers[questions[currentIdx].id] = val;
-            if (currentIdx < questions.length - 1) { currentIdx++; updateQuestion(); }
-            else { calculateResult(); }
+            if (currentIdx < questions.length - 1) {
+                currentIdx++;
+                updateQuestion();
+            } else {
+                calculateResult();
+            }
         }
 
         function prevQuestion() { if (currentIdx > 0) { currentIdx--; updateQuestion(); } }
@@ -226,32 +151,30 @@
             });
 
             let finalType;
-            const threshold = 36;
-            if (yTotal >= threshold && xTotal >= threshold) finalType = types.EXEMPLARY;
-            else if (yTotal >= threshold && xTotal < threshold) finalType = types.ALIENATED;
-            else if (yTotal < threshold && xTotal >= threshold) finalType = types.CONFORMIST;
-            else { finalType = (yTotal >= 24 && xTotal >= 24) ? types.PRAGMATIST : types.PASSIVE; }
-            displayResult(finalType, xTotal, yTotal);
-        }
+            if (yTotal >= 36 && xTotal >= 36) finalType = { name: "모범형", desc: "독립적이며 열정적인 파트너", details: "비판적 사고와 참여가 모두 높으며, 조직의 핵심 엔진 역할을 수행합니다.", advice: "리더와의 파트너십을 넘어 후배 멘토링에 힘써보세요." };
+            else if (yTotal >= 36 && xTotal < 36) finalType = { name: "소외형", desc: "비판적이지만 냉소적인 방관자", details: "사고력은 뛰어나지만 참여도가 낮아 냉소주의에 빠질 위험이 있습니다.", advice: "비판을 넘어 실제적인 해결 대안을 제시해 보세요." };
+            else if (yTotal < 36 && xTotal >= 36) finalType = { name: "순응형", desc: "충성스럽지만 주관 없는 예스맨", details: "참여도는 높으나 리더의 결정에 무조건 따르는 경향이 있습니다.", advice: "본인만의 논리적인 반대 의견을 내는 훈련을 해보세요." };
+            else if (yTotal >= 24 && xTotal >= 24) finalType = { name: "실무형", desc: "상황에 따라 대처하는 생존가", details: "조직 내 정치적 상황에 민감하며 대세를 따르는 경향이 있습니다.", advice: "안전함을 넘어 본인의 신념을 적극적으로 주장해 보세요." };
+            else finalType = { name: "수동형", desc: "지시만 기다리는 수동적 팔로워", details: "사고와 참여 모두가 낮으며 의욕이 저하된 상태일 수 있습니다.", advice: "작은 성공 경험을 통해 자기 효능감을 회복해 보세요." };
 
-        function displayResult(type, x, y) {
-            showScreen('result-screen');
-            document.getElementById('result-name').innerText = type.name;
-            document.getElementById('result-desc').innerText = type.description;
-            document.getElementById('result-details').innerText = type.details;
-            document.getElementById('result-advice').innerText = type.advice;
-            document.getElementById('score-x').innerHTML = `${x} <span class="text-sm font-normal text-slate-400">/ 60</span>`;
-            document.getElementById('score-y').innerHTML = `${y} <span class="text-sm font-normal text-slate-400">/ 60</span>`;
-            document.getElementById('result-icon-container').innerHTML = `<i data-lucide="${type.icon}" class="w-12 h-12 ${type.color.replace('bg-', 'text-')}"></i>`;
-            const dot = document.getElementById('result-dot');
-            dot.className = `absolute w-5 h-5 rounded-full border-4 border-white shadow-xl transition-all duration-1000 ${type.color}`;
-            dot.style.left = `${(x / 60) * 100}%`;
-            dot.style.bottom = `${(y / 60) * 100}%`;
-            lucide.createIcons();
-        }
+            document.getElementById('quiz-screen').classList.add('hidden');
+            document.getElementById('quiz-progress-text').classList.add('hidden');
+            document.getElementById('result-screen').classList.remove('hidden');
+            
+            document.getElementById('result-name').innerText = finalType.name;
+            document.getElementById('result-desc').innerText = finalType.desc;
+            document.getElementById('result-details').innerText = finalType.details;
+            document.getElementById('result-advice').innerText = finalType.advice;
+            document.getElementById('score-x').innerText = xTotal;
+            document.getElementById('score-y').innerText = yTotal;
 
-        function resetQuiz() { showScreen('welcome-screen'); }
-        window.onload = () => lucide.createIcons();
+            // 데이터 전송
+            fetch(scriptURL, {
+                method: 'POST',
+                mode: 'no-cors',
+                body: JSON.stringify({ userName, scoreX: xTotal, scoreY: yTotal, type: finalType.name })
+            });
+        }
     </script>
 </body>
 </html>
